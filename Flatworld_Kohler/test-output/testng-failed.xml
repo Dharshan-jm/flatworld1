@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="org.tyss.flatworld.testverify.TC_13_VerifyObtainLoadCardKohlerGiftTest">
+      <class name="org.tyss.flatworld.testverify.TC_07_VerifyPointsAndListPriceAsNonKohlerSKU0Test">
         <methods>
+          <include name="runTest"/>
           <include name="configBeforeMethod"/>
-          <include name="testRun"/>
           <include name="configBeforeClass"/>
         </methods>
-      </class> <!-- org.tyss.flatworld.testverify.TC_13_VerifyObtainLoadCardKohlerGiftTest -->
+      </class> <!-- org.tyss.flatworld.testverify.TC_07_VerifyPointsAndListPriceAsNonKohlerSKU0Test -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

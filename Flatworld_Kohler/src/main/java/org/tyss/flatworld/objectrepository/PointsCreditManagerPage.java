@@ -37,7 +37,7 @@ public class PointsCreditManagerPage {
 	private WebElement addCreditPageSaveButton;
 	@FindBy(xpath = "(//mat-select[@role='combobox'])[2]/div/div")
 	private WebElement skudropdown;
-	@FindBy(xpath = "//mat-pseudo-checkbox[contains(@class,'mat-pseudo-checkbox')]")
+	@FindBy(xpath = "(//MAT-OPTION[contains(@class,'mat-option mat-focus-indicator mat-option-multiple ng-star-inserted mat-active')]/MAT-PSEUDO-CHECKBOX[@class='mat-pseudo-checkbox mat-option-pseudo-checkbox ng-star-inserted']")
 	private WebElement skucheckbox;
 
 	public WebElement getSkucheckbox() {

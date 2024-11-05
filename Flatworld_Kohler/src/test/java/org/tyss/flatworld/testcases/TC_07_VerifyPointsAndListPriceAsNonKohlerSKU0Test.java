@@ -1,5 +1,7 @@
 package org.tyss.flatworld.testcases;
 
+import static org.testng.Assert.assertEquals;
+
 import java.awt.AWTException;
 import java.time.Duration;
 import org.openqa.selenium.By;
@@ -38,47 +40,20 @@ public class TC_07_VerifyPointsAndListPriceAsNonKohlerSKU0Test extends BaseClass
 		TransactionPage transactionpage = new TransactionPage(driver);
 
 		int number = javaUtility.getRandomNumber(4000);
-		String userid = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "userid") + number;
+		String userid = "thor1";
 		String firstname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "firstname");
 		String lastname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "lastname");
 		String organization = javaUtility.getRandomAlphaNumericString(5);
 		String email = javaUtility.getRandomAlphaNumericString(5) + "@gmail.com";
 		String invoicenumber = "123" + javaUtility.getRandomNumber(10000);
-		String skuName = "skuName" + javaUtility.getRandomNumber(100);
+		String skuName = "skuName" + javaUtility.getRandomNumber(1009);
 
 		dashboardpage.getMenuIcon().click();
 		Reporter.log("----MENU ICON HAMBURGER ICON CLICK SUCCESSFULL----", true);
 
 		dashboardpage.getInsentiveAdminPanelLink().click();
 		Reporter.log("----INCENTIVE ADMIN HOME PAGE CLICK SUCCESSFULL----", true);
-		dashboardpage.getincentivemenu().click();
-
-		incentivepage.getUserAdministrationMenu().click();
-		Reporter.log("----USER ADMINISTRATION CLICK SUCCESSFULL----", true);
-
-		incentivepage.getPublicUserOption().click();
-		Reporter.log("----PUBLIC USER CLICK OPTION CLICK SUCCESSFULL----", true);
-
-		publicuserpage.getAddUserButton().click();
-		Reporter.log("----ADD PUBLIC USER----", true);
-
-		publicuserpage.getUserIdTextfield().sendKeys(userid);
-		publicuserpage.getFirstNameTextfield().sendKeys(firstname);
-		publicuserpage.getLastNameTextfield().sendKeys(lastname);
-		publicuserpage.getEmailTextfield().sendKeys(email);
-		publicuserpage.getOrganizationTextfield().sendKeys(organization);
-
-		webDriverUtility.waitForSeconds(2);
-		publicuserpage.statusSelection("Active");
-		new Actions(driver)
-				.doubleClick(driver.findElement(By.xpath("//div[@class='mat-form-field-flex ng-tns-c4-21']")))
-				.perform();
-
-		publicuserpage.getSaveButton().click();
-		Reporter.log("----PUBLIC USER ADDED SUCCESSFULLY----", true);
-
-		webDriverUtility.waitForSeconds(5);
-
+		
 		Reporter.log("----NAVIGATE TO POINTS CREDIT MANAGER----", true);
 		dashboardpage.getincentivemenu().click();
 		incentivepage.getPointsCreditManager().click();
@@ -91,17 +66,17 @@ public class TC_07_VerifyPointsAndListPriceAsNonKohlerSKU0Test extends BaseClass
 		pointsCreditManagerPage.getIneligibleSkuButton().click();
 		pointsCreditManagerPage.getAddskuNewName().sendKeys(skuName);
 		pointsCreditManagerPage.getAddSkuNewSaveButton().click();
-
-		
-		String skuttotalprice = pointsCreditManagerPage.getSkuTotalPrice().getText();
-		String skuttotalpoints = pointsCreditManagerPage.getSkuTotalPoints().getText();
-		Reporter.log("----TOTAL PRICE " + skuttotalprice, true);
-		Reporter.log("----TOTAL POINTS " + skuttotalpoints, true);
-
 		pointsCreditManagerPage.getUserid().sendKeys(userid);
 		pointsCreditManagerPage.getAddCreditPageSaveButton().click();
 
 		Reporter.log("----ADD CREDIT PAGE SAVE SUCCESSFULL----", true);
+		
+		Reporter.log("----VERIFY IN LIST----", true);
+		String invoicenum=driver.findElement(By.xpath("(//span[contains(@class,'text-ellipsis')])[1]")).getText();
+		String totalpoints=driver.findElement(By.xpath("(//td[contains(@role,'cell')])[10]")).getText();
+		Reporter.log("INVOICE NUMBER :"+invoicenum, true);
+		Reporter.log("TOTAL POINTS :"+totalpoints, true);
+		
 
 		webDriverUtility.waitForSeconds(10);
 		dashboardpage.getincentivemenu().click();
@@ -131,18 +106,27 @@ public class TC_07_VerifyPointsAndListPriceAsNonKohlerSKU0Test extends BaseClass
 
 		boolean actualresult = transactionpage.getPoints().isDisplayed();
 		Assert.assertEquals(actualresult, true, "POINTS DISPLAYED");
-
-		String actualresultvalue = transactionpage.getPoints().getText();
-		Reporter.log(actualresultvalue + ": is O", true);
+        
+		
+		String actualinvoice=driver.findElement(By.xpath("(//span[contains(@class,'text-ellipsis')])[1]")).getText();
+		Reporter.log("INVOICE IN TRANSACTION PAGE :"+actualinvoice, true);
+		
+		String actualpoints= transactionpage.getPoints().getText();
+		Reporter.log("POINTS IN TRANSACTION PAGE :"+actualpoints, true);
 
 		String pointsOnHold = transactionpage.getPointsOnHold().getText();
-		Reporter.log(pointsOnHold + ": POINTS ON HOLD", true);
-
-		if (pointsOnHold.contains(actualresultvalue)) {
-			Reporter.log("---BOTH DATA ARE MATCHING--", true);
-			Reporter.log("----TEST PASS----", true);
-		} else {
-			Reporter.log("----TEST FAIL----", true);
+		Reporter.log("POINTS ON HOLD :"+pointsOnHold, true);
+		
+		if (actualinvoice.contains(invoicenum)) {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		}else {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
+		}
+		
+		if (actualpoints.contains(totalpoints)) {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		}else {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
 		}
 
 	}

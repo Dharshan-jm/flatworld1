@@ -1,13 +1,19 @@
 
 package org.tyss.flatworld.testverify;
 
+import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
+
 import java.awt.AWTException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Listeners;
@@ -26,8 +32,6 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 	
 	@Test
 	public void runTest() throws InterruptedException, AWTException {
-		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
 		Reporter.log("----LOGIN SUCCESSFULL----", true);
 
@@ -90,9 +94,14 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 		pointsCreditManagerPage.getInvoiceNumber().sendKeys(invoicenumber);
 		webDriverUtility.waitForSeconds(7);
 	    
-	    js.executeScript("arguments[0].click();", pointsCreditManagerPage.getSkudropdown());
+	
+	    WebElement dropdown= driver.findElement(By.xpath("(//mat-select[contains(@role,'combobox')])[2]"));
+       Select sel=new Select(dropdown);
+       List<WebElement> options = sel.getOptions();
+       for (WebElement webElement : options) {
+		System.out.println(webElement.toString());
+	}
 	    
-	    pointsCreditManagerPage.getSkucheckbox().click();
        
 	    webDriverUtility.escape();
 	    
@@ -100,8 +109,6 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 	    driver.findElement(By.xpath("(//MAT-SELECT[@role='combobox']/descendant::DIV)[10]")).click();
 	    driver.findElement(By.xpath("//span[contains(text(),' SKU ineligible')]")).click();
 	    
-	    
-	 
         webDriverUtility.waitForSeconds(2);
         String skuttotalprice = pointsCreditManagerPage.getSkuTotalPrice().getText();
 		String skuttotalpoints = pointsCreditManagerPage.getSkuTotalPoints().getText();
@@ -127,7 +134,8 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 		Reporter.log("----ADD CREDIT PAGE SAVE SUCCESSFULL----", true);
 
 		String listprice=driver.findElement(By.xpath("(//TR[@role='row']/descendant::TD[normalize-space(@class)='mat-cell cdk-cell mat-tooltip-trigger cdk-column-listPrice mat-column-listPrice ng-star-inserted'])[1]")).getText();
-		System.out.println(listprice+"listp");
+		System.out.println(listprice); //0.00
+		
 		webDriverUtility.waitForSeconds(10);
 		dashboardpage.getincentivemenu().click();
 		incentivepage.getUserAdministrationMenu().click();

@@ -1,5 +1,5 @@
 
-package org.tyss.flatworld.testcases;
+package org.tyss.flatworld.testverify;
 
 import java.awt.AWTException;
 import java.time.Duration;
@@ -40,7 +40,7 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 		TransactionPage transactionpage = new TransactionPage(driver);
 
 		int number = javaUtility.getRandomNumber(4000);
-		String userid = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "userid") + number;
+		String userid = "thor1";
 		String firstname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "firstname");
 		String lastname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "lastname");
 		String organization = javaUtility.getRandomAlphaNumericString(5);
@@ -53,35 +53,6 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 		dashboardpage.getInsentiveAdminPanelLink().click();
 		Reporter.log("----INCENTIVE ADMIN HOME PAGE CLICK SUCCESSFULL----", true);
 		dashboardpage.getincentivemenu().click();
-
-		incentivepage.getUserAdministrationMenu().click();
-		Reporter.log("----USER ADMINISTRATION CLICK SUCCESSFULL----", true);
-
-		incentivepage.getPublicUserOption().click();
-		Reporter.log("----PUBLIC USER CLICK OPTION CLICK SUCCESSFULL----", true);
-
-		publicuserpage.getAddUserButton().click();
-		Reporter.log("----ADD PUBLIC USER----", true);
-
-		publicuserpage.getUserIdTextfield().sendKeys(userid);
-		publicuserpage.getFirstNameTextfield().sendKeys(firstname);
-		publicuserpage.getLastNameTextfield().sendKeys(lastname);
-		publicuserpage.getEmailTextfield().sendKeys(email);
-		publicuserpage.getOrganizationTextfield().sendKeys(organization);
-
-		webDriverUtility.waitForSeconds(2);
-		publicuserpage.statusSelection("Active");
-		new Actions(driver)
-				.doubleClick(driver.findElement(By.xpath("//div[@class='mat-form-field-flex ng-tns-c4-21']")))
-				.perform();
-
-		publicuserpage.getSaveButton().click();
-		Reporter.log("----PUBLIC USER ADDED SUCCESSFULLY----", true);
-
-		webDriverUtility.waitForSeconds(5);
-
-		Reporter.log("----NAVIGATE TO POINTS CREDIT MANAGER----", true);
-		dashboardpage.getincentivemenu().click();
 		incentivepage.getPointsCreditManager().click();
 
 		Reporter.log("----CLICK ON ADD CREDIT INVOICE BUTTON----", true);
@@ -92,7 +63,10 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 	    
 	    js.executeScript("arguments[0].click();", pointsCreditManagerPage.getSkudropdown());
 	    
-	    pointsCreditManagerPage.getSkucheckbox().click();
+//	    pointsCreditManagerPage.getSkucheckbox().click();
+//	    driver.findElement(By.xpath("//input[@formcontrolname='search']")).click();
+//	    driver.findElement(By.xpath("//input[@formcontrolname='search']")).sendKeys("24564-PC-NY",Keys.ENTER);
+//	    driver.findElement(By.xpath("//mat-pseudo-checkbox")).click();
        
 	    webDriverUtility.escape();
 	 

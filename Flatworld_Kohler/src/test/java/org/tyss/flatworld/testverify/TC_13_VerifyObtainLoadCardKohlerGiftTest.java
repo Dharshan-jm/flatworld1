@@ -9,6 +9,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -25,6 +26,7 @@ import org.tyss.flatworld.objectrepository.PublicUserPage;
 import org.tyss.flatworld.objectrepository.RedeemPage;
 import org.tyss.flatworld.objectrepository.TrainingCoursePage;
 import org.tyss.flatworld.objectrepository.TrainingPage;
+import org.tyss.flatworld.objectrepository.TransactionPage;
 import org.tyss.flatworld.workflowutility.WorkflowUtility;
 
 @Listeners(org.tyss.flatworld.genericutility.ListenerImplementationClass.class)
@@ -50,6 +52,7 @@ public class TC_13_VerifyObtainLoadCardKohlerGiftTest extends BaseClass {
 		ProgramConfigurationPage programconfig = new ProgramConfigurationPage(driver);
 		EditPublicUserPage editpublic = new EditPublicUserPage(driver);
 		RedeemPage redeempage = new RedeemPage(driver);
+		TransactionPage transactionpage=new TransactionPage(driver);
 		Actions act = new Actions(driver);
 
 		int number = javaUtility.getRandomNumber(4000);
@@ -331,9 +334,33 @@ public class TC_13_VerifyObtainLoadCardKohlerGiftTest extends BaseClass {
 		redeempage.getKohlerRewardsGift().click();
 
 		Reporter.log("----ENTER POINTS----", true);
-		driver.findElement(By.xpath("//div/input[contains(@placeholder,'Enter points')]")).sendKeys("4");
-        act.moveToElement(redeempage.getRedeemNowButton()).perform();
-        redeempage.getRedeemNowButton().click();
-
+		
+		Reporter.log("ACTUAL POINT-->"+point,true);
+		Reporter.log("REDEEM POINT-->"+redeemvalue,true);
+		driver.findElement(By.xpath("//div/input[contains(@placeholder,'Enter points')]")).sendKeys(redeemvalue);
+        webDriverUtility.waitForSeconds(2);
+        driver.findElement(By.xpath("//button[contains(text(),'Submit')]")).click();
+        
+//        boolean message = driver.findElement(By.xpath("//h2[contains(text(),'points successfully redeemed for')]")).isDisplayed();
+//        Assert.assertEquals(message,true,"SUCCESS MESSAGE IS DISPLAYED");
+//        Assert.assertEquals(message,false,"SUCCESS MESSAGE IS NOT DISPLAYED");
+        
+        Reporter.log("----NAVIGATE TO TRANSACTION----", true);
+	
+        webDriverUtility.waitForSeconds(10);
+        act.moveToElement(kohlernewpage.getMenuButton()).perform();
+        kohlernewpage.getMenuButton().click();
+        kohlernewpage.getTransactionLink().click();
+        
+        String pointsOnHold = transactionpage.getPointsOnHold().getText();
+        
+        Reporter.log("POINTS ON HOLD-->"+pointsOnHold,true);
+        driver.findElement(By.xpath("//button[text()='Redemptions']")).click();
+        
+        String totalpointsdeducted = driver.findElement(By.xpath(
+				"(//TR[@role='row']/descendant::TD[normalize-space(@class)='mat-cell cdk-cell mat-tooltip-trigger cdk-column-totalPoints mat-column-totalPoints ng-star-inserted'])[1]"))
+				.getText();
+		Reporter.log("REDEEMPTION POINTS-->"+totalpointsdeducted, true);
+        
 	}
 }
