@@ -1,19 +1,14 @@
 
-package org.tyss.flatworld.testverify;
+package org.tyss.flatworld.testcases;
 
 import java.awt.AWTException;
-import java.time.Duration;
-import java.time.LocalDate;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.tyss.flatworld.genericutility.BaseClass;
-import org.tyss.flatworld.genericutility.IConstants;
 import org.tyss.flatworld.objectrepository.DashboardPage;
 import org.tyss.flatworld.objectrepository.IncentiveAdminHomePage;
 import org.tyss.flatworld.objectrepository.KohlerNewPage;
@@ -23,14 +18,11 @@ import org.tyss.flatworld.objectrepository.TransactionPage;
 
 @Listeners(org.tyss.flatworld.genericutility.ListenerImplementationClass.class)
 public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest extends BaseClass {
-	
+
 	@Test
 	public void runTest() throws InterruptedException, AWTException {
-		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
 		Reporter.log("----LOGIN SUCCESSFULL----", true);
-
 		DashboardPage dashboardpage = new DashboardPage(driver);
 		IncentiveAdminHomePage incentivepage = new IncentiveAdminHomePage(driver);
 		PublicUserPage publicuserpage = new PublicUserPage(driver);
@@ -39,19 +31,18 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 		PointsCreditManagerPage pointsCreditManagerPage = new PointsCreditManagerPage(driver);
 		TransactionPage transactionpage = new TransactionPage(driver);
 
-		int number = javaUtility.getRandomNumber(4000);
-		String userid = "thor1";
-		String firstname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "firstname");
-		String lastname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "lastname");
-		String organization = javaUtility.getRandomAlphaNumericString(5);
-		String email = javaUtility.getRandomAlphaNumericString(5) + "@gmail.com";
+		String userid = "Test9161";
 		String invoicenumber = "123" + javaUtility.getRandomNumber(10000);
+		String skuselect = "24564-PC-FF";
+		System.out.println(invoicenumber);
 
 		dashboardpage.getMenuIcon().click();
 		Reporter.log("----MENU ICON HAMBURGER ICON CLICK SUCCESSFULL----", true);
 
 		dashboardpage.getInsentiveAdminPanelLink().click();
 		Reporter.log("----INCENTIVE ADMIN HOME PAGE CLICK SUCCESSFULL----", true);
+
+		Reporter.log("----NAVIGATE TO POINTS CREDIT MANAGER----", true);
 		dashboardpage.getincentivemenu().click();
 		incentivepage.getPointsCreditManager().click();
 
@@ -59,40 +50,27 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 		pointsCreditManagerPage.getAddCreditInvoiceButton().click();
 		pointsCreditManagerPage.getInvoiceDate().sendKeys(javaUtility.getDateAndTimeInSpecifiedFormat("MM-dd-yyyy"));
 		pointsCreditManagerPage.getInvoiceNumber().sendKeys(invoicenumber);
-		webDriverUtility.waitForSeconds(7);
-	    
-	    js.executeScript("arguments[0].click();", pointsCreditManagerPage.getSkudropdown());
-	    
-//	    pointsCreditManagerPage.getSkucheckbox().click();
-//	    driver.findElement(By.xpath("//input[@formcontrolname='search']")).click();
-//	    driver.findElement(By.xpath("//input[@formcontrolname='search']")).sendKeys("24564-PC-NY",Keys.ENTER);
-//	    driver.findElement(By.xpath("//mat-pseudo-checkbox")).click();
-       
-	    webDriverUtility.escape();
-	 
-        webDriverUtility.waitForSeconds(2);
-        String skuttotalprice = pointsCreditManagerPage.getSkuTotalPrice().getText();
-		String skuttotalpoints = pointsCreditManagerPage.getSkuTotalPoints().getText();
-		Reporter.log("----TOTAL PRICE " + skuttotalprice, true);
-		Reporter.log("----TOTAL POINTS " + skuttotalpoints, true);
-		pointsCreditManagerPage.getUserid().sendKeys(userid); 
+		webDriverUtility.waitForSeconds(5);
         
-        //date validation
-        String date =  driver.findElement(By.xpath("(//input[contains(@data-mat-calendar,'mat-datepicker')])[6]")).getAttribute("max");
-        String elementDate=date.substring(0,10);
-        LocalDate currentDate = LocalDate.now();
-        
-        if (elementDate.contains(currentDate.toString())) {
-     
-        	Reporter.log("---DATE MATCH--PASS--"+elementDate, true);
-		}
-        else {
-        	Reporter.log("---DATE MATCH--FAIL--", true);
-		}
-       
-        pointsCreditManagerPage.getAddCreditPageSaveButton().click();
+		js.executeScript("arguments[0].click();",pointsCreditManagerPage.getSkudropdown());
+		webDriverUtility.waitForSeconds(5);
+		pointsCreditManagerPage.getSkudropdownsearch().sendKeys(skuselect, Keys.ENTER);
+		webDriverUtility.waitForSeconds(5);
+		pointsCreditManagerPage.getSkucheckbox().click();
+
+		webDriverUtility.escape();
+		webDriverUtility.waitForSeconds(5);
+		pointsCreditManagerPage.getUserid().sendKeys(userid);
+		pointsCreditManagerPage.getAddCreditPageSaveButton().click();
 
 		Reporter.log("----ADD CREDIT PAGE SAVE SUCCESSFULL----", true);
+
+		webDriverUtility.waitForSeconds(10);
+		Reporter.log("----VERIFY IN LIST----", true);
+		String invoicenum = pointsCreditManagerPage.getVerifyinvoicenum().getText();
+		String totalpoints = pointsCreditManagerPage.getVerifyinvoicepoint().getText();
+		Reporter.log("INVOICE NUMBER :" + invoicenum, true);
+		Reporter.log("TOTAL POINTS :" + totalpoints, true);
 
 		webDriverUtility.waitForSeconds(10);
 		dashboardpage.getincentivemenu().click();
@@ -122,17 +100,27 @@ public class TC_06_VerifyPointsCreditedWhenEntryAddedCreditAndPointsOnHoldTest e
 
 		boolean actualresult = transactionpage.getPoints().isDisplayed();
 		Assert.assertEquals(actualresult, true, "POINTS DISPLAYED");
-		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
-		boolean invoicenum = driver.findElement(By.xpath("//span[contains(text(),'"+invoicenumber+"')]")).isDisplayed();
-		Assert.assertEquals(invoicenum, true, "INVOICENUMBER IS DISPLAYED :"+invoicenumber);
-		
+
+		String actualinvoice = transactionpage.getCaptureinvoice().getText();
+		Reporter.log("INVOICE IN TRANSACTION PAGE :" + actualinvoice, true);
+
+		String actualpoints = transactionpage.getPoints().getText();
+		Reporter.log("POINTS IN TRANSACTION PAGE :" + actualpoints, true);
+
 		String pointsOnHold = transactionpage.getPointsOnHold().getText();
-		Reporter.log(pointsOnHold + ": POINTS ON HOLD", true);
-		
-		Reporter.log("----TEST COMPLETED----", true);
-		
-		
+		Reporter.log("POINTS ON HOLD :" + pointsOnHold, true);
+
+		if (actualinvoice.contains(invoicenum)) {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		} else {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
+		}
+
+		if (actualpoints.contains(totalpoints)) {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		} else {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
+		}
 	}
 
 }

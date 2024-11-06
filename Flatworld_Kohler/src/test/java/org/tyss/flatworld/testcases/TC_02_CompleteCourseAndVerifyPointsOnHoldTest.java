@@ -31,8 +31,6 @@ public class TC_02_CompleteCourseAndVerifyPointsOnHoldTest extends BaseClass {
 
 	@Test
 	public void completeCourseAndVerifyPointsAreCredited() throws  InterruptedException, EncryptedDocumentException, IOException {
-
-	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         
 	    Reporter.log("----LOGIN SUCCESSFULL----", true);
 	    

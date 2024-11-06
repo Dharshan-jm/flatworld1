@@ -16,8 +16,17 @@ public class TransactionPage {
 	@FindBy(xpath="(//th[@role='columnheader']/../../..//td[@role='cell'])[8]")private WebElement points;
 	@FindBy(xpath = "//span[contains(@class,'spnPoints inline-flex')]") private WebElement pointsOnHold;
     @FindBy(xpath="//SPAN[contains(text(),'points')]/*")private WebElement lock;
+    @FindBy(xpath = "(//span[contains(@class,'text-ellipsis')])[1]") private WebElement captureinvoice;
     
 	
+	public WebElement getCaptureinvoice() {
+		return captureinvoice;
+	}
+
+	public void setCaptureinvoice(WebElement captureinvoice) {
+		this.captureinvoice = captureinvoice;
+	}
+
 	public WebElement getLock() {
 		return lock;
 	}

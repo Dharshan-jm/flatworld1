@@ -34,6 +34,8 @@ public class TC_12_VerifyObtainLoadCardKohlerRwardsTest extends BaseClass {
 	@Test
 	public void testRun() throws InterruptedException, EncryptedDocumentException, IOException {
 
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+
 		Reporter.log("----LOGIN SUCCESSFULL----", true);
 
 		DashboardPage dashboardpage = new DashboardPage(driver);
@@ -245,7 +247,7 @@ public class TC_12_VerifyObtainLoadCardKohlerRwardsTest extends BaseClass {
 		kohlernewpage.getYeardropdown().click();
 		kohlernewpage.getYearselect().click();
 
-		// upload
+
 		Reporter.log("----UPLOAD FILE----", true);
 		kohlernewpage.getChoosefilebutton().sendKeys(pdfpath);
 
@@ -336,8 +338,8 @@ public class TC_12_VerifyObtainLoadCardKohlerRwardsTest extends BaseClass {
 		Reporter.log("REDEEM POINT-->"+redeemvalue,true);
 		driver.findElement(By.xpath("//div/input[contains(@placeholder,'Enter points')]")).sendKeys(redeemvalue);
         webDriverUtility.waitForSeconds(2);
-        driver.findElement(By.xpath("//button[contains(text(),'Submit')]")).click();
-         
+        driver.findElement(By.xpath("//button[contains(text(),'Submit')]")).click();    
+        
         Reporter.log("----NAVIGATE TO TRANSACTION----", true);
 	
         webDriverUtility.waitForSeconds(10);

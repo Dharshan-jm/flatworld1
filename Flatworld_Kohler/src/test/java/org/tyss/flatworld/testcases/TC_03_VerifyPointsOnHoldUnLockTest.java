@@ -35,8 +35,6 @@ public class TC_03_VerifyPointsOnHoldUnLockTest extends BaseClass{
 	@Test
 	public void testRun() throws InterruptedException, EncryptedDocumentException, IOException {
 		
-		
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         
 	    Reporter.log("----LOGIN SUCCESSFULL----", true);
 	    

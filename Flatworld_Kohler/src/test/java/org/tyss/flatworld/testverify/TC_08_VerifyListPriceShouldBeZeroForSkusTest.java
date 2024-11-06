@@ -1,25 +1,15 @@
 
 package org.tyss.flatworld.testverify;
-
-import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
-
 import java.awt.AWTException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.tyss.flatworld.genericutility.BaseClass;
-import org.tyss.flatworld.genericutility.IConstants;
 import org.tyss.flatworld.objectrepository.DashboardPage;
 import org.tyss.flatworld.objectrepository.IncentiveAdminHomePage;
 import org.tyss.flatworld.objectrepository.KohlerNewPage;
@@ -29,12 +19,11 @@ import org.tyss.flatworld.objectrepository.TransactionPage;
 
 @Listeners(org.tyss.flatworld.genericutility.ListenerImplementationClass.class)
 public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
-	
+
 	@Test
 	public void runTest() throws InterruptedException, AWTException {
 
 		Reporter.log("----LOGIN SUCCESSFULL----", true);
-
 		DashboardPage dashboardpage = new DashboardPage(driver);
 		IncentiveAdminHomePage incentivepage = new IncentiveAdminHomePage(driver);
 		PublicUserPage publicuserpage = new PublicUserPage(driver);
@@ -43,46 +32,16 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 		PointsCreditManagerPage pointsCreditManagerPage = new PointsCreditManagerPage(driver);
 		TransactionPage transactionpage = new TransactionPage(driver);
 
-		int number = javaUtility.getRandomNumber(4000);
-		String userid = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "userid") + number;
-		String firstname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "firstname");
-		String lastname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "lastname");
-		String organization = javaUtility.getRandomAlphaNumericString(5);
-		String email = javaUtility.getRandomAlphaNumericString(5) + "@gmail.com";
+		String userid = "Test9161";
 		String invoicenumber = "123" + javaUtility.getRandomNumber(10000);
+		String skuselect = "24564-PC-FF";
+		System.out.println(invoicenumber);
 
 		dashboardpage.getMenuIcon().click();
 		Reporter.log("----MENU ICON HAMBURGER ICON CLICK SUCCESSFULL----", true);
 
 		dashboardpage.getInsentiveAdminPanelLink().click();
 		Reporter.log("----INCENTIVE ADMIN HOME PAGE CLICK SUCCESSFULL----", true);
-		dashboardpage.getincentivemenu().click();
-
-		incentivepage.getUserAdministrationMenu().click();
-		Reporter.log("----USER ADMINISTRATION CLICK SUCCESSFULL----", true);
-
-		incentivepage.getPublicUserOption().click();
-		Reporter.log("----PUBLIC USER CLICK OPTION CLICK SUCCESSFULL----", true);
-
-		publicuserpage.getAddUserButton().click();
-		Reporter.log("----ADD PUBLIC USER----", true);
-
-		publicuserpage.getUserIdTextfield().sendKeys(userid);
-		publicuserpage.getFirstNameTextfield().sendKeys(firstname);
-		publicuserpage.getLastNameTextfield().sendKeys(lastname);
-		publicuserpage.getEmailTextfield().sendKeys(email);
-		publicuserpage.getOrganizationTextfield().sendKeys(organization);
-
-		webDriverUtility.waitForSeconds(2);
-		publicuserpage.statusSelection("Active");
-		new Actions(driver)
-				.doubleClick(driver.findElement(By.xpath("//div[@class='mat-form-field-flex ng-tns-c4-21']")))
-				.perform();
-
-		publicuserpage.getSaveButton().click();
-		Reporter.log("----PUBLIC USER ADDED SUCCESSFULLY----", true);
-
-		webDriverUtility.waitForSeconds(5);
 
 		Reporter.log("----NAVIGATE TO POINTS CREDIT MANAGER----", true);
 		dashboardpage.getincentivemenu().click();
@@ -92,50 +51,33 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 		pointsCreditManagerPage.getAddCreditInvoiceButton().click();
 		pointsCreditManagerPage.getInvoiceDate().sendKeys(javaUtility.getDateAndTimeInSpecifiedFormat("MM-dd-yyyy"));
 		pointsCreditManagerPage.getInvoiceNumber().sendKeys(invoicenumber);
-		webDriverUtility.waitForSeconds(7);
-	    
-	
-	    WebElement dropdown= driver.findElement(By.xpath("(//mat-select[contains(@role,'combobox')])[2]"));
-       Select sel=new Select(dropdown);
-       List<WebElement> options = sel.getOptions();
-       for (WebElement webElement : options) {
-		System.out.println(webElement.toString());
-	}
-	    
-       
-	    webDriverUtility.escape();
-	    
-	    webDriverUtility.waitForSeconds(2);
-	    driver.findElement(By.xpath("(//MAT-SELECT[@role='combobox']/descendant::DIV)[10]")).click();
-	    driver.findElement(By.xpath("//span[contains(text(),' SKU ineligible')]")).click();
-	    
-        webDriverUtility.waitForSeconds(2);
-        String skuttotalprice = pointsCreditManagerPage.getSkuTotalPrice().getText();
-		String skuttotalpoints = pointsCreditManagerPage.getSkuTotalPoints().getText();
-		Reporter.log("----TOTAL PRICE " + skuttotalprice, true);
-		Reporter.log("----TOTAL POINTS " + skuttotalpoints, true);
-		pointsCreditManagerPage.getUserid().sendKeys(userid); 
-        
-        //date validation
-        String date =  driver.findElement(By.xpath("(//input[contains(@data-mat-calendar,'mat-datepicker')])[6]")).getAttribute("max");
-        String elementDate=date.substring(0,10);
-        LocalDate currentDate = LocalDate.now();
-        
-        if (elementDate.contains(currentDate.toString())) {
-     
-        	Reporter.log("---DATE MATCH--PASS--"+elementDate, true);
-		}
-        else {
-        	Reporter.log("---DATE MATCH--FAIL--", true);
-		}
-       
-        pointsCreditManagerPage.getAddCreditPageSaveButton().click();
+		webDriverUtility.waitForSeconds(5);
+
+		js.executeScript("arguments[0].click();",pointsCreditManagerPage.getSkudropdown());
+		webDriverUtility.waitForSeconds(5);
+		pointsCreditManagerPage.getSkudropdownsearch().sendKeys(skuselect, Keys.ENTER);
+		webDriverUtility.waitForSeconds(5);
+		pointsCreditManagerPage.getSkucheckbox().click();
+
+		webDriverUtility.escape();
+		webDriverUtility.waitForSeconds(5);
+		
+		Reporter.log("----SKU INELIGIBLE SELECT----", true);
+		pointsCreditManagerPage.getSkurejectiondropwdown().click();
+		webDriverUtility.waitForSeconds(2);
+		pointsCreditManagerPage.getSkuineligible().click();
+		
+		pointsCreditManagerPage.getUserid().sendKeys(userid);
+		pointsCreditManagerPage.getAddCreditPageSaveButton().click();
 
 		Reporter.log("----ADD CREDIT PAGE SAVE SUCCESSFULL----", true);
 
-		String listprice=driver.findElement(By.xpath("(//TR[@role='row']/descendant::TD[normalize-space(@class)='mat-cell cdk-cell mat-tooltip-trigger cdk-column-listPrice mat-column-listPrice ng-star-inserted'])[1]")).getText();
-		System.out.println(listprice); //0.00
-		
+		webDriverUtility.waitForSeconds(10);
+		Reporter.log("----VERIFY IN LIST----", true);
+		String invoicenum = pointsCreditManagerPage.getVerifyinvoicenum().getText();
+		String totalpoints = pointsCreditManagerPage.getVerifyinvoicepoint().getText();
+		Reporter.log("TOTAL POINTS :" + totalpoints, true);
+
 		webDriverUtility.waitForSeconds(10);
 		dashboardpage.getincentivemenu().click();
 		incentivepage.getUserAdministrationMenu().click();
@@ -160,21 +102,31 @@ public class TC_08_VerifyListPriceShouldBeZeroForSkusTest extends BaseClass {
 
 		Reporter.log("----NAVIGATE TO TRANSACTION LINK----", true);
 		kohlernewpage.getTransactionLink().click();
-		webDriverUtility.waitForSeconds(2);
+		webDriverUtility.waitForSeconds(30);
 
 		boolean actualresult = transactionpage.getPoints().isDisplayed();
 		Assert.assertEquals(actualresult, true, "POINTS DISPLAYED");
-		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
-		boolean invoicenum = driver.findElement(By.xpath("//span[contains(text(),'"+invoicenumber+"')]")).isDisplayed();
-		Assert.assertEquals(invoicenum, true, "INVOICENUMBER IS DISPLAYED :"+invoicenumber);
-		
+
+		String actualinvoice = transactionpage.getCaptureinvoice().getText();
+		Reporter.log("INVOICE IN TRANSACTION PAGE :" + actualinvoice, true);
+
+		String actualpoints = transactionpage.getPoints().getText();
+		Reporter.log("POINTS IN TRANSACTION PAGE :" + actualpoints, true);
+
 		String pointsOnHold = transactionpage.getPointsOnHold().getText();
-		Reporter.log(pointsOnHold + ": POINTS ON HOLD", true);
-		
-		Reporter.log("----TEST COMPLETED----", true);
-		
-		
+		Reporter.log("POINTS ON HOLD :" + pointsOnHold, true);
+
+		if (actualinvoice.contains(invoicenum)) {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		} else {
+			Reporter.log("INVOICE IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
+		}
+
+		if (actualpoints.contains(totalpoints)) {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS MATCHING", true);
+		} else {
+			Reporter.log("POINTS IN BOTH LIST AND TRANSACTION PAGE IS NOT MATCHING", true);
+		}
 	}
 
 }

@@ -9,7 +9,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -56,7 +55,7 @@ public class TC_13_VerifyObtainLoadCardKohlerGiftTest extends BaseClass {
 		Actions act = new Actions(driver);
 
 		int number = javaUtility.getRandomNumber(4000);
-		String userid = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "userid") + number;
+		String userid = "A"+fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "userid") + number;
 		String firstname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "firstname");
 		String lastname = fileUtility.getDataFromPropertyFile(IConstants.PROPERTY_FILE_PATH, "lastname");
 		String organization = javaUtility.getRandomAlphaNumericString(5);
@@ -248,7 +247,7 @@ public class TC_13_VerifyObtainLoadCardKohlerGiftTest extends BaseClass {
 		kohlernewpage.getYeardropdown().click();
 		kohlernewpage.getYearselect().click();
 
-		// upload
+
 		Reporter.log("----UPLOAD FILE----", true);
 		kohlernewpage.getChoosefilebutton().sendKeys(pdfpath);
 
@@ -339,11 +338,7 @@ public class TC_13_VerifyObtainLoadCardKohlerGiftTest extends BaseClass {
 		Reporter.log("REDEEM POINT-->"+redeemvalue,true);
 		driver.findElement(By.xpath("//div/input[contains(@placeholder,'Enter points')]")).sendKeys(redeemvalue);
         webDriverUtility.waitForSeconds(2);
-        driver.findElement(By.xpath("//button[contains(text(),'Submit')]")).click();
-        
-//        boolean message = driver.findElement(By.xpath("//h2[contains(text(),'points successfully redeemed for')]")).isDisplayed();
-//        Assert.assertEquals(message,true,"SUCCESS MESSAGE IS DISPLAYED");
-//        Assert.assertEquals(message,false,"SUCCESS MESSAGE IS NOT DISPLAYED");
+        driver.findElement(By.xpath("//button[contains(text(),'Submit')]")).click();    
         
         Reporter.log("----NAVIGATE TO TRANSACTION----", true);
 	

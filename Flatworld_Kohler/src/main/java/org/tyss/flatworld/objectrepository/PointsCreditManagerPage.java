@@ -35,10 +35,61 @@ public class PointsCreditManagerPage {
 	private WebElement dateProcessed;
 	@FindBy(xpath = "//span[contains(text(),'Save')]")
 	private WebElement addCreditPageSaveButton;
-	@FindBy(xpath = "(//mat-select[@role='combobox'])[2]/div/div")
+	@FindBy(xpath = "//DIV[contains(@class,'two-section-width')]/descendant::DIV[.='SKU List'][4]")
 	private WebElement skudropdown;
-	@FindBy(xpath = "(//MAT-OPTION[contains(@class,'mat-option mat-focus-indicator mat-option-multiple ng-star-inserted mat-active')]/MAT-PSEUDO-CHECKBOX[@class='mat-pseudo-checkbox mat-option-pseudo-checkbox ng-star-inserted']")
+	@FindBy(xpath = "//div/input[contains(@data-placeholder,'Search')]")
+	private WebElement skudropdownsearch;
+	@FindBy(xpath = "(//mat-pseudo-checkbox)[1]")
 	private WebElement skucheckbox;
+	
+	@FindBy(xpath = "(//span[contains(@class,'text-ellipsis')])[1]")
+	private WebElement verifyinvoicenum;
+	@FindBy(xpath = "(//td[contains(@role,'cell')])[10]")
+	private WebElement verifyinvoicepoint ;
+	
+	@FindBy(xpath = "//mat-select[contains(@formcontrolname,'skuRejectionReason')]") private WebElement skurejectiondropwdown;
+    @FindBy(xpath = "//span[ contains(text(),'SKU ineligible')]")private WebElement skuineligible;
+    
+    
+	public WebElement getSkurejectiondropwdown() {
+		return skurejectiondropwdown;
+	}
+
+	public void setSkurejectiondropwdown(WebElement skurejectiondropwdown) {
+		this.skurejectiondropwdown = skurejectiondropwdown;
+	}
+
+	public WebElement getSkuineligible() {
+		return skuineligible;
+	}
+
+	public void setSkuineligible(WebElement skuineligible) {
+		this.skuineligible = skuineligible;
+	}
+
+	public WebElement getVerifyinvoicenum() {
+		return verifyinvoicenum;
+	}
+
+	public void setVerifyinvoicenum(WebElement verifyinvoicenum) {
+		this.verifyinvoicenum = verifyinvoicenum;
+	}
+
+	public WebElement getVerifyinvoicepoint() {
+		return verifyinvoicepoint;
+	}
+
+	public void setVerifyinvoicepoint(WebElement verifyinvoicepoint) {
+		this.verifyinvoicepoint = verifyinvoicepoint;
+	}
+
+	public WebElement getSkudropdownsearch() {
+		return skudropdownsearch;
+	}
+
+	public void setSkudropdownsearch(WebElement skudropdownsearch) {
+		this.skudropdownsearch = skudropdownsearch;
+	}
 
 	public WebElement getSkucheckbox() {
 		return skucheckbox;
